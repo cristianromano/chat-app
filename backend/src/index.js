@@ -12,10 +12,13 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
-    credentials: true,
+    origin: "http://localhost:5173", // Replace with your frontend's origin
+    methods: ["GET", "POST", "PATCH", "PUT", "DELETE"], // Allowed HTTP methods
+    credentials: true, // If cookies or authentication are needed
   })
 );
+app.options("*", cors()); // This handles the pre-flight request
+
 app.use(express.json());
 app.use(cookieParser());
 
