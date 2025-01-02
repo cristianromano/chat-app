@@ -79,25 +79,17 @@ export const signOut = async (req, res) => {
 export const updateProfile = async (req, res) => {
   try {
     const userId = req.userId;
-    const { email, fullName, profilePic } = req.body;
-    const imageCloud = "";
+    const { profilePic } = req.body;
+
+    let imageCloud = "";
     if (profilePic) {
-      imageCloud = await cloudinary.uploader.upload(
-        profilePic,
-        async (error, result) => {
-          if (error) {
-            return res.status(400).json({ message: "Upload image failed" });
-          }
-          return result.secure_url;
-        }
-      );
+      const res = await cloudinary.uploader.upload(profilePic);
+      imageCloud = res.secure_url;
     }
 
     const user = await User.findByIdAndUpdate(
       userId,
       {
-        email,
-        fullName,
         profilePic: imageCloud || profilePic,
       },
       { new: true }

@@ -117,9 +117,7 @@ export function Register() {
               disabled={isSigningUp}
             >
               {isSigningUp ? (
-                <div className="flex items-center justify-center h-screen">
-                  <span className="loading loading-spinner loading-lg"></span>
-                </div>
+                <span className="loading loading-spinner loading-lg"></span>
               ) : (
                 "Crear cuenta"
               )}
