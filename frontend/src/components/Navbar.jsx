@@ -32,15 +32,14 @@ export function Navbar() {
             </Link>
             {authUser && (
               <>
-                <button onClick={logout} className="btn btn-sm btn-ghost">
-                  <IoIosLogOut className="size-5" />
-                  <span className="hidden sm:inline">Salir</span>
-                </button>
-
                 <Link to="/profile" className="btn btn-sm btn-ghost">
                   <FaRegUser className="size-5" />
                   Perfil
                 </Link>
+                <button onClick={logout} className="btn btn-sm btn-ghost">
+                  <IoIosLogOut className="size-5" />
+                  <span className="hidden sm:inline">Salir</span>
+                </button>
               </>
             )}
           </div>
