@@ -1,7 +1,7 @@
 import User from "../models/user.model.js";
 import Message from "../models/messages.model.js";
 import cloudinary from "../lib/cloudinary.js";
-
+import { getRecieverSocketId, io } from "../lib/socket.js";
 export const getUserSideBar = async (req, res) => {
   try {
     const users = await User.find({ _id: { $ne: req.userId } }).select(
@@ -37,15 +37,11 @@ export const sendMessage = async (req, res) => {
   try {
     const { text, image } = req.body;
     const { id: receiverId } = req.params;
-    const imgCloud = "";
+    let imgCloud = "";
 
     if (image) {
-      imgCloud = cloudinary.uploader.upload(image, async (error, result) => {
-        if (error) {
-          return res.status(400).json({ message: "Upload image failed" });
-        }
-        return result.secure_url;
-      });
+      const res = await cloudinary.uploader.upload(image);
+      imgCloud = res.secure_url;
     }
 
     const message = new Message({
@@ -56,6 +52,10 @@ export const sendMessage = async (req, res) => {
     });
 
     const newMessage = await message.save();
+
+    const getSocketId = getRecieverSocketId(receiverId);
+    if (getSocketId) io.to(getSocketId).emit("newMessage", newMessage);
+
     res.status(201).json(newMessage);
   } catch (error) {
     res.status(500).json({ message: error.message });

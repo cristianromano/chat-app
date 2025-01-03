@@ -17,7 +17,6 @@ export function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
     if (!formData.email || !formData.password) {
       toast.error("Por favor, completa todos los campos.");
       return;

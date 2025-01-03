@@ -12,7 +12,7 @@ import { useThemeStore } from "./store/useThemeStore";
 function App() {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
   const { theme } = useThemeStore();
-  
+
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
@@ -42,10 +42,7 @@ function App() {
           path="/signup"
           element={!authUser ? <Register /> : <Navigate to={"/"} />}
         />
-        <Route
-          path="/settings"
-          element={authUser ? <SettingsPage /> : <Navigate to={"/login"} />}
-        />
+        <Route path="/settings" element={<SettingsPage />} />
         <Route
           path="/profile"
           element={authUser ? <ProfilePage /> : <Navigate to={"/login"} />}
