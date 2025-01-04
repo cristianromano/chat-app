@@ -3,6 +3,9 @@ import axiosInstance from "../lib/axios";
 import toast from "react-hot-toast";
 import { io } from "socket.io-client";
 
+const BASE_URL =
+  import.meta.env.MODE === "development" ? "http://localhost:5000" : "/";
+
 export const useAuthStore = create((set, get) => ({
   authUser: null,
   isSigningUp: false,
@@ -11,6 +14,7 @@ export const useAuthStore = create((set, get) => ({
   isCheckingAuth: true,
   onlineUsers: [],
   socket: null,
+
   checkAuth: async () => {
     set({ isCheckingAuth: true });
     try {
@@ -84,13 +88,12 @@ export const useAuthStore = create((set, get) => ({
       set({ isUpdatingProfile: false });
     }
   },
-
   connectSocket: () => {
     const { authUser } = get();
     if (!authUser || get().socket?.connected) {
       return; // Ya existe una conexión activa
     }
-    const socket = io("http://localhost:5000", {
+    const socket = io(BASE_URL, {
       withCredentials: true,
       query: { userId: authUser._id },
     });
