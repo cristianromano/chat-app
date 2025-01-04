@@ -8,13 +8,10 @@ import cors from "cors";
 import { app, server } from "./lib/socket.js";
 import path from "path";
 
-const __dirname = path.resolve();
-
-app.use(express.static(path.join(__dirname, "public")));
-
 dotenv.config();
 const PORT = process.env.PORT || 3000;
 
+const __dirname = path.resolve();
 app.use(
   cors({
     origin: "http://localhost:5173", // Replace with your frontend's origin
