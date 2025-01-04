@@ -18,6 +18,9 @@ export const ChatContainer = () => {
   const { authUser } = useAuthStore();
   const messageEndRef = useRef(null);
 
+  // console.log("mensajes", messages);
+  // console.log("authuser ", authUser);
+
   useEffect(() => {
     if (selectedUser?._id) {
       getMessages(selectedUser._id);
@@ -26,6 +29,7 @@ export const ChatContainer = () => {
         unsubscribeToMessages();
       };
     }
+    return () => unsubscribeToMessages();
   }, [
     selectedUser._id,
     getMessages,
@@ -43,7 +47,7 @@ export const ChatContainer = () => {
     return (
       <div className="flex-1 flex flex-col overflow-auto">
         <ChatHeader />
-        <MessageSkeleton />;
+        <MessageSkeleton />
         <MessageInput />
       </div>
     );

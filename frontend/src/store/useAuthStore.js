@@ -16,7 +16,6 @@ export const useAuthStore = create((set, get) => ({
   socket: null,
 
   checkAuth: async () => {
-    set({ isCheckingAuth: true });
     try {
       const response = await axiosInstance.get("/auth/check");
       set({ authUser: response.data });
@@ -59,8 +58,8 @@ export const useAuthStore = create((set, get) => ({
     try {
       const response = await axiosInstance.post("/auth/signin", formData);
       set({ authUser: response.data });
-      get().connectSocket();
       toast.success("¡Inicio de sesión exitoso!");
+      get().connectSocket();
     } catch (error) {
       const errorMessage =
         error.response?.data?.message ||
@@ -94,27 +93,23 @@ export const useAuthStore = create((set, get) => ({
       return; // Ya existe una conexión activa
     }
     const socket = io(BASE_URL, {
-      withCredentials: true,
       query: { userId: authUser._id },
     });
 
     socket.connect();
 
+    console.log(socket);
     set({ socket: socket });
 
     socket.on("user-connected", (users) => {
       set({ onlineUsers: users });
     });
 
-    socket.on("user-disconnected", (users) => {
-      set({ onlineUsers: users });
-    });
+    // socket.on("user-disconnected", (users) => {
+    //   set({ onlineUsers: users });
+    // });
   },
   disconnectSocket: () => {
-    const socket = get().socket;
-    if (socket) {
-      socket.disconnect();
-    }
-    set({ socket: null }); // Limpia la referencia
+    if (get().socket?.connected) get().socket.disconnect();
   },
 }));

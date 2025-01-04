@@ -10,7 +10,6 @@ const io = new Server(server, {
   cors: {
     origin: "http://localhost:5173", // Replace with your frontend's origin
     methods: ["GET", "POST", "PATCH", "PUT", "DELETE"], // Allowed HTTP methods
-    credentials: true, // If cookies or authentication are needed
   },
 });
 
@@ -25,7 +24,6 @@ io.on("connection", (socket) => {
 
   const userId = socket.handshake.query.userId;
   userSocketMap[userId] = socket.id;
-
   io.emit("user-connected", Object.keys(userSocketMap));
 
   socket.on("disconnect", () => {
